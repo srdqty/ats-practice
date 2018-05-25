@@ -1,5 +1,5 @@
 let
-  pkgs = import ./nixpkgs-pinned {};
+  pkgs = import ./nix/nixpkgs-pinned {};
 in
   pkgs.stdenv.mkDerivation {
     name = "ats-practice";
@@ -11,7 +11,7 @@ in
       pkgs.ats2
     ];
 
-    shellHook = builtins.readFile ./bash-prompt.sh + ''
+    shellHook = builtins.readFile ./nix/bash-prompt.sh + ''
       source ${pkgs.git.out}/etc/bash_completion.d/git-prompt.sh
       source ${pkgs.git.out}/etc/bash_completion.d/git-completion.bash
     '';
