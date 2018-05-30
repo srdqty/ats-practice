@@ -11,3 +11,4 @@ http://ats-lang.sourceforge.net/DOCUMENT/INT2PROGINATS/HTML/x3241.html
 * Beginning C++ with Game Programming
 * Algorithm Design Manual
 * Functional Data Structures
+* slist_ptr_append using slseg_v_unsplit: http://ats-lang.sourceforge.net/DOCUMENT/INT2PROGINATS/HTML/x3756.html
