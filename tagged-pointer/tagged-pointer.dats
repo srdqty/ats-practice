@@ -80,6 +80,20 @@ implement {right_tptr_s} is_ptr_left (x) = false
 implement {left_tptr_s} is_ptr_left (x) = true
 
 (*****************************************************************************)
+extern fn
+{a:t@ype}
+  tptr_get_left
+{n:addr}
+(pf: a @ n | tp: tptr_t (n,left_tptr_s)) : (a @ n | a)
+
+(*****************************************************************************)
+extern fn
+{a:t@ype}
+  tptr_get_right
+{n:addr}
+(pf: a @ n | tp: tptr_t (n,right_tptr_s)) : (a @ n | a)
+
+(*****************************************************************************)
 fn f {n:addr} {t:tptr_s} (x: tptr_t (n, t)) : [t:tptr_s] tptr_t (n,t) = x
 
 (*****************************************************************************)
