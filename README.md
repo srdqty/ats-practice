@@ -1,7 +1,7 @@
 # ats-practice
 
-A nix-shell with ats2 installed.
+A nix-shell with ats2 0.3.10 and patsolve_z3.
 
 ```
-nix-shell nix/development.nix
+nix-shell ./shell.nix
 ```
