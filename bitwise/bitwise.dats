@@ -1,7 +1,9 @@
 #include "share/atspre_define.hats"
 #include "share/atspre_staload.hats"
 
-datasort bv32 =
+// Type checks with int but not the abstract sort :(
+sortdef bv32 = int
+// datasort bv32 = (* abstract *)
 
 stacst bv32_of_int: (int) -> bv32
 stadef bv32 = bv32_of_int
