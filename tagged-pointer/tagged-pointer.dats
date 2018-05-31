@@ -80,8 +80,7 @@ implement {right_tptr_s} is_ptr_left (x) = false
 implement {left_tptr_s} is_ptr_left (x) = true
 
 (*****************************************************************************)
-fn f {n:addr} (x: tptr_t (n, right_tptr_s)) : [t:tptr_s] tptr_t (n,t) = x
-fn f {n:addr} (x: tptr_t (n, left_tptr_s)) : [t:tptr_s] tptr_t (n,t) = x
+fn f {n:addr} {t:tptr_s} (x: tptr_t (n, t)) : [t:tptr_s] tptr_t (n,t) = x
 
 (*****************************************************************************)
 implement main0 () = let
