@@ -14,6 +14,7 @@ in
       pkgs.z3
       ats2
       patsolve_z3
+      pkgs.haskellPackages.c2ats
     ];
 
     shellHook = builtins.readFile ./nix/bash-prompt.sh + ''
