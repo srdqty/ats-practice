@@ -6,30 +6,12 @@ datasort tptr_s =
 | left_tptr_s
 | right_tptr_s
 
-abst@ype uintptr_t = $extype "uintptr_t"
-
-%{
-#define lor_uintptr(x,y) ((x)|(y))
-#define land_uintptr(x,y) ((x)&(y))
-#define lnot_uintptr(x) (~(x))
-#define eq_uintptr(x,y) ((x)==(y))
-%}
-
-extern fun lor_uintptr (x:uintptr_t, y: uintptr_t): uintptr_t = "mac#"
-extern fun land_uintptr (x:uintptr_t, y: uintptr_t): uintptr_t = "mac#"
-extern fun lnot_uintptr (x:uintptr_t): uintptr_t = "mac#"
-extern fun eq_uintptr (x:uintptr_t, y:uintptr_t): bool = "mac#"
-
-overload lor with lor_uintptr
-overload land with land_uintptr
-overload == with eq_uintptr
-
-abst@ype tptr_t (n:addr, x:tptr_s) = uintptr_t
+abst@ype tptr_t (n:addr, x:tptr_s) = uintptr
 
 (*****************************************************************************)
 fn tptr_left_of_ptr {n:addr} (p: ptr n): tptr_t (n, left_tptr_s) = let
-  val n = $UN.cast{uintptr_t}(p)
-  val tagged = n lor $UN.cast{uintptr_t}(1)
+  val n = $UN.cast{uintptr}(p)
+  val tagged = n lor $UN.cast{uintptr}(1)
   val pleft = $UN.cast{ptr}(tagged)
 in
   $UN.cast{tptr_t (n,left_tptr_s)}(pleft)
@@ -46,8 +28,8 @@ implement {right_tptr_s} ptr_of_tptr {n} (tp) =
   $UN.cast{ptr n}(tp)
 
 implement {left_tptr_s} ptr_of_tptr {n} (tp) = let
-  val n = $UN.cast{uintptr_t}(tp)
-  val untagged = n land (lnot_uintptr($UN.cast{uintptr_t}(1)))
+  val n = $UN.cast{uintptr}(tp)
+  val untagged == n land (lnot 1u)
 in
   $UN.cast{ptr n}(untagged)
 end
@@ -56,11 +38,9 @@ end
 extern fn {t:tptr_s} is_ptr_right {n:addr} (x: tptr_t (n,t)) : bool
 
 implement {t} is_ptr_right (x) = let
-  val zero = $UN.cast{uintptr_t}(0)
-  val one = $UN.cast{uintptr_t}(1)
-  val x = $UN.cast{uintptr_t}(x)
+  val x = $UN.cast{uintptr}(x)
 in
-  zero == (x land one)
+  0u = (x land 1u)
 end
 
 implement {right_tptr_s} is_ptr_right (x) = true
@@ -70,10 +50,9 @@ implement {left_tptr_s} is_ptr_right (x) = false
 extern fn {t:tptr_s} is_ptr_left {n:addr} (x: tptr_t (n,t)) : bool
 
 implement {t} is_ptr_left (x) = let
-  val one = $UN.cast{uintptr_t}(1)
-  val x = $UN.cast{uintptr_t}(x)
+  val x = $UN.cast{uintptr}(x)
 in
-  one == (x land one)
+  1u = (x land 1u)
 end
 
 implement {right_tptr_s} is_ptr_left (x) = false
