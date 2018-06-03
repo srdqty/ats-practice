@@ -1,26 +1,24 @@
 { stdenv
-, fetchurl
+, fetchFromGitHub
 , gmp
-, ats2-contrib
 }:
 
 stdenv.mkDerivation rec {
   name = "ats-${version}";
-  version = "0.3.10";
+  version = "0.3.11";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-${version}.tgz";
-    sha256 = "0mjp8a4zq2gh2w1hifg2lj6lmhriicqcdd2yyl3ah5kghg3w2y05";
+  src = fetchFromGitHub {
+    owner = "srdqty";
+    repo = "ats2-lang-mirror";
+    rev = "c4df96a39242ad59ce6ebfd814c02b900dbee062";
+    sha256 = "049wl3jkfw3x0sk817zanh8ak6416lkrc1hgnp0y5nm4qwyd3jf2";
   };
+
+  PATSHOME="${src}";
 
   buildInputs = [
     gmp
   ];
 
   setupHook = ./setup-hook.sh;
-
-  postInstall = ''
-    rm -rf $out/lib/ats2-postiats-0.3.10/contrib
-    cp -r ${ats2-contrib}/ats2-contrib/contrib $out/lib/ats2-postiats-0.3.10/contrib
-  '';
 }
