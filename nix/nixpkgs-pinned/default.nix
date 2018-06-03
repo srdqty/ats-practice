@@ -1,14 +1,15 @@
-{ config ? {} }:
+{ config ? {}
+, overlays ? []
+}:
 
 let
   fetch-nixpkgs = import ./fetch-nixpkgs.nix;
-
-  nixpkgs-args = builtins.fromJSON (builtins.readFile ./nixpkgs.json);
+  nixpkgs-params = import ./fetch-nixpkgs-params.nix {};
 
   nixpkgs = fetch-nixpkgs {
-    inherit (nixpkgs-args) owner repo rev sha256;
+    inherit (nixpkgs-params) url rev sha256;
   };
 
-  pkgs = import nixpkgs { config = config; };
+  pkgs = import nixpkgs { inherit config overlays; };
 in
   pkgs
