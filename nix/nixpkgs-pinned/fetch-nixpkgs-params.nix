@@ -1,11 +1,11 @@
-{ owner ? "NixOS"
-, repo ? "nixpkgs"
-, rev ? "56fb68dcef494b7cdb3e09362d67836b8137019c"
-, pkgs ? import <nixpkgs> {}
+{ owner
+, repo
+, rev
+, bootstrap-pkgs
 }:
 
 let
-  url="https://github.com/${owner}/${repo}/archive/${rev}.tar.gz";
+  url= import ./build-url.nix { inherit owner repo rev; };
 
   newNix = 0 <= builtins.compareVersions builtins.nixVersion "1.12";
 
@@ -14,7 +14,7 @@ let
   else
     builtins.fetchurl url;
 
-  json = pkgs.writeText "data.json" ''
+  json = bootstrap-pkgs.writeText "nixpkgs.json" ''
     { "url": "${url}"
     , "rev": "${rev}"
     , "owner": "${owner}"
@@ -27,18 +27,18 @@ let
   else
     "sha256sum -b ${file} | awk -n '{print $1}'";
 
-  paramsDrv = pkgs.stdenv.mkDerivation {
-    name = "fetchParamsFromGitHub";
+  paramsDrv = bootstrap-pkgs.stdenv.mkDerivation {
+    name = "nixpkgs-params-${rev}";
 
     src = ./.;
 
     buildInputs = [
-      pkgs.jq
-      pkgs.nix
-      pkgs.coreutils
+      bootstrap-pkgs.jq
+      bootstrap-pkgs.nix
+      bootstrap-pkgs.coreutils
     ];
 
-    builder = pkgs.writeScript "builder" ''
+    builder = bootstrap-pkgs.writeScript "builder" ''
       source $stdenv/setup
 
       mkdir -p $out
